@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMG_NAME: ${{ secrets.DOCKER_USERNAME }}/academic-engine-parse-docx
-      TAGS: production
+      TAGS: main
       CONTAINER_NAME: academic-engine-parse-docx-production-v1
     steps:
       - name: Executing deployment
