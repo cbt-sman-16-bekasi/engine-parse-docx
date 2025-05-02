@@ -74,4 +74,4 @@ def parse_docx():
     return jsonify(soal_list)
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    app.run(host='0.0.0.0', port=5000)
