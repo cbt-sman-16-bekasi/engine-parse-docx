@@ -38,3 +38,23 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           docker image build -t ${{ env.IMG_NAME }}:${{ env.TAGS }}-v1 .
           docker push ${{ env.IMG_NAME }}:${{ env.TAGS }}-v1
+  deploy:
+    name: Deploy to production server
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      IMG_NAME: ${{ secrets.DOCKER_USERNAME }}/academic-engine-parse-docx
+      TAGS: production
+      CONTAINER_NAME: academic-engine-parse-docx-production-v1
+    steps:
+      - name: Executing deployment
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST_SERVER }}
+          username: ${{ secrets.USER_SERVER }}
+          password: ${{ secrets.PASSWORD_SERVER }}
+          port: 22
+          script: |
+            docker pull ${{ env.IMG_NAME }}:${{ env.TAGS }}-v1
+            docker rm -f ${{ env.CONTAINER_NAME }} || true
+            docker run -d -p 8085:5000 --restart always --name ${{ env.CONTAINER_NAME }} ${{ env.IMG_NAME }}:${{ env.TAGS }}-v1
