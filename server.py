@@ -73,5 +73,26 @@ def parse_docx():
 
     return jsonify(soal_list)
 
+@app.route("/parse-docx/essay", methods=["POST"])
+def parse_docx():
+    file = request.files.get("file")
+    if not file:
+        return {"error": "No file"}, 400
+
+    doc = Document(file)
+    soal_list = []
+
+    for i, row in enumerate(doc.tables[0].rows):
+        if i == 0:
+            continue
+        cells = row.cells
+        soal_data = {}
+        for idx, key in enumerate(['soal', 'jawaban']):
+            contents = extract_text_and_images(cells[idx])
+            soal_data[key] = contents
+        soal_list.append(soal_data)
+
+    return jsonify(soal_list)
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
