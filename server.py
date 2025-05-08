@@ -74,7 +74,7 @@ def parse_docx():
     return jsonify(soal_list)
 
 @app.route("/parse-docx/essay", methods=["POST"])
-def parse_docx():
+def parse_docx_essay():
     file = request.files.get("file")
     if not file:
         return {"error": "No file"}, 400
