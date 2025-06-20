@@ -87,7 +87,7 @@ def extract_text_and_images(cell):
 
     def convert_omml_to_mathml(omml_element):
         try:
-            xslt_root = etree.parse('OMML2MML.XSL')  # pastikan file ini tersedia
+            xslt_root = etree.parse('OMML2MML.xsl')  # pastikan file ini tersedia
             transform = etree.XSLT(xslt_root)
             mathml = transform(omml_element)
             return etree.tostring(mathml, encoding='unicode')
